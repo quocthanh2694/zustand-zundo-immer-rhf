@@ -10,25 +10,28 @@ interface Todo {
 
 type State = {
   todos: Todo[];
+  compA: any;
 };
 
 type Actions = {
   addTodo: (text: string) => void;
   toggleTodoCompletion: (id: number) => void;
   removeTodo: (id: number) => void;
+  setCompA: (d: any) => void;
 };
 
 const initialState: State = {
   todos: [],
+  compA: {},
 };
 // slice version: https://docs.pmnd.rs/zustand/guides/typescript#slices-pattern
 const useStore = create<State & Actions>()(
   temporal(
     immer((set) => ({
       todos: initialState.todos,
+      compA: initialState.compA,
       addTodo: (text: string) =>
         set((draft) => {
-          console.log('draft"', text);
           draft.todos.push({ id: Date.now(), text, completed: false });
         }),
       toggleTodoCompletion: (id: number) =>
@@ -42,6 +45,12 @@ const useStore = create<State & Actions>()(
         set((state) => {
           state.todos = state.todos.filter((x) => x.id != id);
         }),
+
+      setCompA: (data: any) => {
+        set((state) => {
+          state.compA = data;
+        });
+      },
     }))
   )
 );

@@ -1,7 +1,7 @@
 "use client";
 
 import useStore from "@/store";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 interface Todo {
@@ -11,9 +11,11 @@ interface Todo {
 }
 
 const TodoForm = () => {
-  const { todos, addTodo, removeTodo, toggleTodoCompletion } = useStore(
-    (state) => state
-  );
+  console.log("TODO render...");
+  const todos = useStore((state) => state.todos);
+  const addTodo = useStore((state) => state.addTodo);
+  const removeTodo = useStore((state) => state.removeTodo);
+  const toggleTodoCompletion = useStore((state) => state.toggleTodoCompletion);
   const { undo, redo } = useStore.temporal.getState();
 
   const {
@@ -28,7 +30,6 @@ const TodoForm = () => {
   }, [todos]);
 
   const onSubmit = (data: { text: string }) => {
-    console.log("data", data);
     addTodo(data.text + todos.length);
   };
 
@@ -43,7 +44,12 @@ const TodoForm = () => {
       <br />
       <input
         type="text"
-        {...register("text", { required: true, onChange: (e)=>{console.log('change heelo', e.target.value)} })}
+        {...register("text", {
+          required: true,
+          // onChange: (e) => {
+          //   console.log("change heelo", e.target.value);
+          // },
+        })}
         placeholder="Add Todo"
       />
 
